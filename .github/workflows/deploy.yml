@@ -1,0 +1,71 @@
+name: Deploy Design Hub
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: deploy/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/designhub:latest
+            ghcr.io/${{ github.repository_owner }}/designhub:${{ github.sha }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          envs: GHCR_TOKEN,GHCR_ACTOR
+          script: |
+            set -euo pipefail
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_ACTOR" --password-stdin
+            docker pull ghcr.io/omeraydinai/designhub:latest
+            docker logout ghcr.io
+
+            cd /opt/designhub/deploy
+            docker compose -f docker-compose.yml -f docker-compose.override.yml \
+              --env-file .env -p designhub up -d --no-build --force-recreate
+
+            echo "Waiting for designhub-web to report healthy..."
+            for i in $(seq 1 24); do
+              status=$(docker inspect --format='{{.State.Health.Status}}' designhub-web 2>/dev/null || echo "missing")
+              if [ "$status" = "healthy" ]; then
+                echo "designhub-web is healthy."
+                exit 0
+              fi
+              if [ "$status" = "unhealthy" ]; then
+                echo "designhub-web reported unhealthy after deploy."
+                docker logs --tail 50 designhub-web
+                exit 1
+              fi
+              sleep 5
+            done
+            echo "Timed out waiting for designhub-web to become healthy."
+            docker logs --tail 50 designhub-web
+            exit 1
