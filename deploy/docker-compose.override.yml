@@ -1,0 +1,10 @@
+services:
+  open-design:
+    container_name: designhub-web
+    ports: !reset []
+    networks:
+      - designhub_net
+
+networks:
+  designhub_net:
+    name: designhub_net
