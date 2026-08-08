@@ -2959,6 +2959,18 @@
   .home-hero__foot-left {
     flex-wrap: wrap;
   }
+  /* Below the 900px breakpoint .home-hero__foot-left wraps onto a second
+     row internally, but .home-hero__input-foot itself never wrapped, so
+     .home-hero__foot-right stayed vertically centered against the now
+     two-row-tall foot-left and crowded/overlapped its second row (the new
+     Design Hub org-identity pill made foot-left wide enough to hit this
+     in practice). Wrapping the whole row lets foot-right drop to its own
+     line instead of sharing vertical space with foot-left's second row.
+  */
+  .home-hero__input-foot {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
   .home-hero__footer-options {
     display: inline-flex;
     align-items: center;
