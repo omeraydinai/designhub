@@ -40,6 +40,10 @@ const XIAOHONGSHU_URL =
 
 export type EntrySettingsSection =
   | 'execution'
+  // Design Hub: org-identity settings card lives in SettingsDialog's
+  // 'instructions' section, next to customInstructions. Deep-linked from
+  // the sidebar org-identity card (EntryNavRail).
+  | 'instructions'
   | 'media'
   | 'composio'
   | 'orbit'

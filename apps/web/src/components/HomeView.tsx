@@ -236,6 +236,10 @@ const AUTHORING_DEFAULT_SCENARIO_INPUTS = {
 
 interface Props {
   isActive?: boolean;
+  /** Design Hub: workspace organization identity (AppConfig.orgIdentity),
+   *  threaded through to HomeHero's composer identity pill. */
+  orgIdentity?: { name: string; logoDataUrl?: string };
+  onOpenOrgIdentitySettings?: () => void;
   projects: Project[];
   projectsLoading?: boolean;
   designSystems?: DesignSystemSummary[];
@@ -408,6 +412,8 @@ export function seedHomeComposerPrompt(prompt: string): void {
 
 export function HomeView({
   isActive = true,
+  orgIdentity,
+  onOpenOrgIdentitySettings,
   projects,
   projectsLoading,
   designSystems = EMPTY_DESIGN_SYSTEMS,
@@ -2538,6 +2544,8 @@ export function HomeView({
       {isActive ? <AppWashKineticGrid clipBottomTo=".home-hero" /> : null}
       <HomeHero
         workspaceContext={workspaceContext}
+        orgIdentity={orgIdentity}
+        onOpenOrgIdentitySettings={onOpenOrgIdentitySettings}
         ref={inputRef}
         active={isActive}
         firstRunGuide={projectsLoading ? undefined : projects.length === 0}

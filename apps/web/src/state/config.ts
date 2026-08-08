@@ -1151,6 +1151,9 @@ export function mergeDaemonConfig(
   if (daemonConfig.customInstructions !== undefined) {
     next.customInstructions = daemonConfig.customInstructions ?? undefined;
   }
+  if (daemonConfig.orgIdentity !== undefined) {
+    next.orgIdentity = daemonConfig.orgIdentity ?? undefined;
+  }
   if (daemonConfig.projectLocations !== undefined) {
     next.projectLocations = daemonConfig.projectLocations;
   }
@@ -1280,6 +1283,7 @@ export async function syncConfigToDaemon(
     privacyDecisionAt: config.privacyDecisionAt,
     allowSilentUpdates: config.allowSilentUpdates,
     customInstructions: config.customInstructions ?? null,
+    orgIdentity: config.orgIdentity ?? null,
     projectLocations: config.projectLocations ?? [],
     defaultProjectLocationId: config.defaultProjectLocationId ?? 'default',
   };

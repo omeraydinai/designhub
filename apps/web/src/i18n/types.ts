@@ -1120,6 +1120,8 @@ export interface Dict {
   'entry.discordAria': string;
   'entry.discordAriaWithOnline': string;
   'entry.discordOnlineLabel': string;
+  'entry.orgIdentityEmptyName': string;
+  'entry.orgIdentitySubtitle': string;
   'entry.mailAria': string;
   'entry.accountSettings': string;
   'chat.collapsePane': string;
@@ -1276,6 +1278,24 @@ export interface Dict {
 
   // Entry home
   'homeHero.title': string;
+  'homeHero.dh.orgPillEmpty': string;
+  'homeHero.dh.orgPillWithName': string;
+  'homeHero.dh.defaultModel': string;
+  'homeHero.dh.startHere': string;
+  'homeHero.dh.startCards.corporateSite.title': string;
+  'homeHero.dh.startCards.corporateSite.desc': string;
+  'homeHero.dh.startCards.corporateSite.prompt': string;
+  'homeHero.dh.startCards.transparencyDashboard.title': string;
+  'homeHero.dh.startCards.transparencyDashboard.desc': string;
+  'homeHero.dh.startCards.transparencyDashboard.prompt': string;
+  'homeHero.dh.startCards.donationCampaign.title': string;
+  'homeHero.dh.startCards.donationCampaign.desc': string;
+  'homeHero.dh.startCards.donationCampaign.prompt': string;
+  'homeHero.dh.startCards.eventRegistration.title': string;
+  'homeHero.dh.startCards.eventRegistration.desc': string;
+  'homeHero.dh.startCards.eventRegistration.prompt': string;
+  'homeHero.dh.title': string;
+  'homeHero.dh.subtitle': string;
   'homeHero.startWithTemplate': string;
   'homeHero.startBlankProject': string;
   'homeHero.templatePicker.label': string;
@@ -2208,6 +2228,13 @@ export interface Dict {
   'settings.instructionsSubtitle': string;
   'settings.instructionsNavSub': string;
   'settings.customInstructionsDesc': string;
+  'settings.orgIdentityTitle': string;
+  'settings.orgIdentityDesc': string;
+  'settings.orgIdentityNameLabel': string;
+  'settings.orgIdentityNamePlaceholder': string;
+  'settings.orgIdentityLogoButton': string;
+  'settings.orgIdentityLogoRemove': string;
+  'settings.orgIdentityLogoError': string;
   'mcpClient.forwardedToLabel': string;
   'mcpClient.notForwardedToLabel': string;
   'mcpClient.forwardedAcpNote': string;

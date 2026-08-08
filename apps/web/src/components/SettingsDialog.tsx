@@ -1487,6 +1487,39 @@ export function switchApiProtocolConfig(
   );
 }
 
+// Design Hub: shrink an uploaded org logo to a small square PNG data URL
+// client-side (canvas), matching the inline-JSON storage AppConfig.orgIdentity
+// uses (no separate upload endpoint) and keeping the daemon-synced payload small.
+const ORG_LOGO_MAX_SIZE = 128;
+
+function resizeImageFileToDataUrl(file: File, maxSize = ORG_LOGO_MAX_SIZE): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error ?? new Error('Read failed'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Could not decode image.'));
+      img.onload = () => {
+        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+        const width = Math.max(1, Math.round(img.width * scale));
+        const height = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Canvas unavailable.'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/png'));
+      };
+      img.src = typeof reader.result === 'string' ? reader.result : '';
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export function SettingsDialog({
   presentation = 'modal',
   initial,
@@ -1531,6 +1564,8 @@ export function SettingsDialog({
     ? restorePendingByokProviderDraft(normalizedInitialConfig)
     : normalizedInitialConfig;
   const [cfg, setCfg] = useState<AppConfig>(() => initialFormConfig);
+  const orgLogoInputRef = useRef<HTMLInputElement>(null);
+  const [orgLogoError, setOrgLogoError] = useState<string | null>(null);
   const [maxTokensInput, setMaxTokensInput] = useState(
     initialFormConfig.maxTokens == null ? '' : String(initialFormConfig.maxTokens),
   );
@@ -5928,6 +5963,95 @@ export function SettingsDialog({
                     })
                   }
                 />
+              </div>
+            </section>
+          ) : null}
+
+          {activeSection === 'instructions' ? (
+            <section className="settings-section settings-section-card instructions-rules-section">
+              <div className="memory-field-block instructions-rules-card">
+                <div className="memory-block-head">
+                  <div>
+                    <h4>{t('settings.orgIdentityTitle')}</h4>
+                    <p className="hint">{t('settings.orgIdentityDesc')}</p>
+                  </div>
+                </div>
+                <label className="field">
+                  <span className="field-label">{t('settings.orgIdentityNameLabel')}</span>
+                  <input
+                    type="text"
+                    maxLength={200}
+                    value={cfg.orgIdentity?.name ?? ''}
+                    placeholder={t('settings.orgIdentityNamePlaceholder')}
+                    onChange={(event) => {
+                      const name = event.target.value;
+                      setCfg({
+                        ...cfg,
+                        orgIdentity: name
+                          ? { ...cfg.orgIdentity, name }
+                          : undefined,
+                      });
+                    }}
+                  />
+                </label>
+                <div className="org-identity-logo-row">
+                  {cfg.orgIdentity?.logoDataUrl ? (
+                    <img
+                      className="org-identity-logo-preview"
+                      src={cfg.orgIdentity.logoDataUrl}
+                      alt=""
+                    />
+                  ) : null}
+                  <input
+                    ref={orgLogoInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                    style={{ display: 'none' }}
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      event.target.value = '';
+                      if (!file) return;
+                      setOrgLogoError(null);
+                      void resizeImageFileToDataUrl(file)
+                        .then((logoDataUrl) => {
+                          setCfg((prev) => ({
+                            ...prev,
+                            orgIdentity: {
+                              name: prev.orgIdentity?.name ?? '',
+                              logoDataUrl,
+                            },
+                          }));
+                        })
+                        .catch(() => setOrgLogoError(t('settings.orgIdentityLogoError')));
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="seg-btn small"
+                    onClick={() => orgLogoInputRef.current?.click()}
+                  >
+                    {t('settings.orgIdentityLogoButton')}
+                  </button>
+                  {cfg.orgIdentity?.logoDataUrl ? (
+                    <button
+                      type="button"
+                      className="seg-btn small"
+                      onClick={() =>
+                        setCfg((prev) => ({
+                          ...prev,
+                          orgIdentity: prev.orgIdentity?.name
+                            ? { name: prev.orgIdentity.name }
+                            : undefined,
+                        }))
+                      }
+                    >
+                      {t('settings.orgIdentityLogoRemove')}
+                    </button>
+                  ) : null}
+                </div>
+                {orgLogoError ? (
+                  <p className="hint org-identity-logo-error">{orgLogoError}</p>
+                ) : null}
               </div>
             </section>
           ) : null}

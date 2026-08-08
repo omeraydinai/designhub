@@ -128,6 +128,9 @@ export interface AppConfigPrefs {
   // `metadata.linkedDirs` (read-only `--add-dir` awareness, no Design Files
   // import). Stored most-recent-first; capped at RECENT_LINKED_DIRS_MAX.
   recentLinkedDirs?: string[];
+  // Design Hub: workspace organization identity shown in the sidebar card
+  // and home composer pill. See AppConfig.orgIdentity in apps/web/src/types.ts.
+  orgIdentity?: { name: string; logoDataUrl?: string } | null;
 }
 
 // Cap on how many recent working directories we remember. Keeps the picker's
@@ -153,6 +156,7 @@ const ALLOWED_KEYS: ReadonlySet<keyof AppConfigPrefs> = new Set([
   'projectLocations',
   'defaultProjectLocationId',
   'recentLinkedDirs',
+  'orgIdentity',
 ] as const);
 
 function configFile(dataDir: string): string {
@@ -664,6 +668,28 @@ function applyConfigValue(
         if (cleaned.length >= RECENT_LINKED_DIRS_MAX) break;
       }
       target[key] = cleaned;
+    } else {
+      delete target[key];
+    }
+    return;
+  }
+  if (key === 'orgIdentity') {
+    if (value === null) {
+      target[key] = null;
+      return;
+    }
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const raw = value as Record<string, unknown>;
+      const name = typeof raw.name === 'string' ? raw.name.trim().slice(0, 200) : '';
+      if (!name) {
+        delete target[key];
+        return;
+      }
+      const logoDataUrl =
+        typeof raw.logoDataUrl === 'string' && raw.logoDataUrl.startsWith('data:image/')
+          ? raw.logoDataUrl.slice(0, 500_000)
+          : undefined;
+      target[key] = logoDataUrl ? { name, logoDataUrl } : { name };
     } else {
       delete target[key];
     }

@@ -1,10 +1,29 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+import { Lexend_Deca, Nunito } from 'next/font/google';
 import { I18nProvider } from '../src/i18n';
 import { AnalyticsProvider } from '../src/analytics/provider';
 import '@excalidraw/excalidraw/index.css';
 import '../src/index.css';
 import '../src/styles/home/index.css';
+
+// Design Hub: self-hosted (next/font, zero runtime request) Lexend Deca +
+// Nunito for the entry-shell dark redesign's headings/pills only. The rest
+// of the app stays on Albert Sans (tokens.css --sans/--serif, untouched) --
+// these are exposed as separate --font-heading/--font-body-alt vars so
+// nothing else silently re-themes.
+const lexendDeca = Lexend_Deca({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '700'],
+  variable: '--font-heading',
+  display: 'swap',
+});
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--font-body-alt',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Design Hub',
@@ -40,7 +59,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* biome-ignore lint/security/noDangerouslySetInnerHtml: intentional theme-init inline script to prevent FOUC */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${lexendDeca.variable} ${nunito.variable}`}>
         <I18nProvider>
           <AnalyticsProvider>{children}</AnalyticsProvider>
         </I18nProvider>

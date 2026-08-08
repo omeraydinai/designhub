@@ -1461,7 +1461,7 @@ export function EntryShell({
 
   if (view === 'onboarding') {
     return (
-      <div className="entry-shell entry-shell--no-header entry-shell--onboarding">
+      <div className="entry-shell entry-shell--no-header entry-shell--onboarding entry-shell--dark">
         <main className="entry-onboarding-modal" aria-label={t('settings.welcomeTitle')}>
           <OnboardingView
             config={config}
@@ -1503,7 +1503,7 @@ export function EntryShell({
   );
 
   return (
-    <div className="entry-shell entry-shell--no-header">
+    <div className="entry-shell entry-shell--no-header entry-shell--dark">
       <div
         className={`entry${railOpen ? ' entry--rail-open' : ''}`}
         // The team/local shell is a labeled Manus-style rail, so widen the rail
@@ -1527,6 +1527,7 @@ export function EntryShell({
           billing={workspaceBilling}
           balanceUsd={workspaceBalanceUsd}
           onOpenSettings={onOpenSettings}
+          orgIdentity={config.orgIdentity}
           onInvite={() => changeView('members')}
           onSignInCloud={() => navigate({ kind: 'home', view: 'onboarding' })}
           onSignedOut={onSignedOut}
@@ -1608,6 +1609,8 @@ export function EntryShell({
             <div className="entry-main__view-home" data-testid="entry-view-home" data-active={view === 'home' ? 'true' : 'false'} {...inactiveViewProps(view === 'home')}>
               <HomeView
                 isActive={view === 'home'}
+                orgIdentity={config.orgIdentity}
+                onOpenOrgIdentitySettings={() => onOpenSettings?.('instructions')}
                 projects={homeProjectsList}
                 projectsLoading={projectsLoading}
                 designSystems={designSystems}

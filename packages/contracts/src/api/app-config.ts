@@ -60,6 +60,9 @@ export interface AppConfigPrefs {
   allowSilentUpdates?: boolean;
   orbit?: OrbitConfigPrefs;
   customInstructions?: string | null;
+  /** Design Hub: workspace organization identity shown in the sidebar card
+   *  and home composer pill. */
+  orgIdentity?: { name: string; logoDataUrl?: string } | null;
   /** External project library roots. The daemon adds its built-in .od/projects location at read time. */
   projectLocations?: ProjectLocationPrefs[];
   /** Project location id used for new projects when the create request does not choose one explicitly. */

@@ -471,6 +471,16 @@ export interface AppConfig {
   customInstructions?: string;
   projectLocations?: ProjectLocationPrefs[];
   defaultProjectLocationId?: string | null;
+  /** Design Hub: the workspace's organization identity (name + optional logo),
+   *  shown in the sidebar identity card and threaded into the home composer.
+   *  Single/workspace-scoped, distinct from the plural Brand kits in
+   *  packages/contracts/src/api/brands.ts. logoDataUrl is a small (<=256px)
+   *  client-resized base64 data URL, stored inline like other AppConfig
+   *  fields rather than via a separate upload endpoint. */
+  orgIdentity?: {
+    name: string;
+    logoDataUrl?: string;
+  };
 }
 
 export interface TelemetryConfig {

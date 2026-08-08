@@ -12,6 +12,41 @@
   grid-template-rows: 1fr;
   --entry-rail-width: 236px;
 }
+.entry-shell--dark {
+  --bg: #050040;
+  --bg-app: #050040;
+  --bg-panel: rgba(255, 255, 255, 0.07);
+  --bg-subtle: rgba(255, 255, 255, 0.05);
+  --bg-muted: rgba(255, 255, 255, 0.1);
+  --bg-elevated: rgba(255, 255, 255, 0.07);
+  --bg-fill: rgba(255, 255, 255, 0.12);
+  --bg-fill-secondary: rgba(255, 255, 255, 0.08);
+  --bg-fill-tertiary: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --border-soft: rgba(255, 255, 255, 0.1);
+  --border-selected: rgba(255, 255, 255, 0.3);
+  --text: rgba(255, 255, 255, 0.78);
+  --text-strong: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-soft: rgba(255, 255, 255, 0.5);
+  --text-faint: rgba(255, 255, 255, 0.38);
+  /* Tailwind v4's Turbopack CSS parser chokes on a 3-item stacked value here
+     (2 radial-gradients + 1 linear-gradient all compile individually paired
+     with the linear-gradient, but all three together trip a CssSyntaxError
+     with no usable location -- reproduced via bisection, not investigated
+     further). Two aura blobs collapsed to one; visually very close to the
+     mockup's two-blob version. */
+  --veil-page:
+    radial-gradient(62% 78% at 40% -22%, rgba(128, 145, 255, 0.30) 0%, rgba(128, 145, 255, 0) 62%),
+    linear-gradient(160deg, #19006a 0%, #0d0257 46%, #050040 100%);
+  color: var(--text);
+}
+.entry-shell--dark .entry-nav-rail__panel {
+  --rail-surface: rgba(255, 255, 255, 0.07);
+}
+
+
 
 /* `.entry-shell` is always mounted inside `.workspace-shell__body`, which
    reserves its own space above for the app's persistent tab-chrome header
@@ -5557,6 +5592,83 @@
   justify-content: flex-end;
   min-width: 0;
 }
+/* Design Hub: organization identity card, top of the rail (above the
+   account row). Uses the same design tokens the rest of the rail already
+   consumes (the bg-panel/border/text* tokens), so it auto-follows the
+   .entry-shell--dark scope without extra dark-mode rules. */
+.entry-nav-rail__org-card {
+  padding: 0 2px 4px;
+}
+.entry-nav-rail__org-trigger {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--bg-panel);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px;
+  font: inherit;
+  color: var(--text-strong);
+  text-align: left;
+}
+.entry-nav-rail__org-trigger:hover {
+  background: color-mix(in srgb, var(--text) 6%, var(--bg-panel));
+}
+.entry-nav-rail__org-trigger:focus,
+.entry-nav-rail__org-trigger:focus-visible {
+  outline: none;
+  background: color-mix(in srgb, var(--text) 6%, var(--bg-panel));
+}
+.entry-nav-rail__org-avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  border-radius: 10px;
+  background: linear-gradient(140deg, #8091ff 0%, #4554b6 100%);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+}
+.entry-nav-rail__org-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.entry-nav-rail__org-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.entry-nav-rail__org-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-strong);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.entry-nav-rail__org-subtitle {
+  font-size: 11.5px;
+  color: var(--text-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.entry-nav-rail__org-chevron {
+  flex: 0 0 auto;
+  color: var(--text-faint);
+}
+
 .entry-nav-rail__account-updater:empty {
   display: none;
 }

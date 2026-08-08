@@ -224,6 +224,9 @@ interface Props {
   updaterSlot?: ReactNode;
   /** Optional notice shown above the footer controls. */
   footerNotice?: ReactNode;
+  /** Design Hub: workspace organization identity (AppConfig.orgIdentity),
+   *  shown as a card at the very top of the rail, above the account row. */
+  orgIdentity?: { name: string; logoDataUrl?: string };
 }
 
 interface NavButtonProps {
@@ -569,6 +572,7 @@ export function EntryNavRail({
   onSignedOut,
   updaterSlot,
   footerNotice,
+  orgIdentity,
 }: Props) {
   const { t } = useI18n();
   const analytics = useAnalytics();
@@ -1016,6 +1020,30 @@ export function EntryNavRail({
     >
       <div className="entry-nav-rail__panel">
       <div className="entry-nav-rail__group">
+        <div className="entry-nav-rail__org-card" data-testid="entry-nav-org-card">
+          <button
+            type="button"
+            className="entry-nav-rail__org-trigger"
+            onClick={() => onOpenSettings?.('instructions')}
+          >
+            <span className="entry-nav-rail__org-avatar" aria-hidden>
+              {orgIdentity?.logoDataUrl ? (
+                <img src={orgIdentity.logoDataUrl} alt="" />
+              ) : (
+                (orgIdentity?.name?.charAt(0).toUpperCase() || brandLabel.charAt(0).toUpperCase())
+              )}
+            </span>
+            <span className="entry-nav-rail__org-copy">
+              <span className="entry-nav-rail__org-name">
+                {orgIdentity?.name || t('entry.orgIdentityEmptyName')}
+              </span>
+              <span className="entry-nav-rail__org-subtitle">
+                {t('entry.orgIdentitySubtitle')}
+              </span>
+            </span>
+            <Icon name="chevron-down" size={14} className="entry-nav-rail__org-chevron" />
+          </button>
+        </div>
         {context ? (
           <div
             ref={accountContainerRef}

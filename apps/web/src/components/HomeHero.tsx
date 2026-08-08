@@ -140,9 +140,79 @@ export interface ExamplePromptInfo {
   brief: Record<string, string>;
 }
 
+// Design Hub: "Buradan başlayın" quick-start grid. Static content (icon +
+// i18n title/description key + seed prompt) — clicking a card seeds the
+// composer with the prompt key and focuses it, same as an example-prompt card.
+const HOME_START_CARDS: ReadonlyArray<{
+  id: string;
+  titleKey: string;
+  descKey: string;
+  promptKey: string;
+  icon: ReactNode;
+}> = [
+  {
+    id: 'corporate-site',
+    titleKey: 'homeHero.dh.startCards.corporateSite.title',
+    descKey: 'homeHero.dh.startCards.corporateSite.desc',
+    promptKey: 'homeHero.dh.startCards.corporateSite.prompt',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+        <path d="M3 9h18" />
+        <path d="M7 13h7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'transparency-dashboard',
+    titleKey: 'homeHero.dh.startCards.transparencyDashboard.title',
+    descKey: 'homeHero.dh.startCards.transparencyDashboard.desc',
+    promptKey: 'homeHero.dh.startCards.transparencyDashboard.prompt',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 20V10" />
+        <path d="M10 20V4" />
+        <path d="M16 20v-7" />
+        <path d="M22 20H2" />
+      </svg>
+    ),
+  },
+  {
+    id: 'donation-campaign',
+    titleKey: 'homeHero.dh.startCards.donationCampaign.title',
+    descKey: 'homeHero.dh.startCards.donationCampaign.desc',
+    promptKey: 'homeHero.dh.startCards.donationCampaign.prompt',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 20s-7-4.4-7-9.2A4 4 0 0 1 12 8a4 4 0 0 1 7-.8c0 4.6-7 12.8-7 12.8Z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'event-registration',
+    titleKey: 'homeHero.dh.startCards.eventRegistration.title',
+    descKey: 'homeHero.dh.startCards.eventRegistration.desc',
+    promptKey: 'homeHero.dh.startCards.eventRegistration.prompt',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+        <path d="M4 10h16" />
+        <path d="M8 3v4" />
+        <path d="M16 3v4" />
+      </svg>
+    ),
+  },
+];
+
 interface Props {
   workspaceContext?: WorkspaceCollabContext | null;
   active?: boolean;
+  /** Design Hub: workspace organization identity (AppConfig.orgIdentity),
+   *  shown as the composer's identity pill. */
+  orgIdentity?: { name: string; logoDataUrl?: string };
+  /** Design Hub: opens Settings on the org-identity field, from the
+   *  composer's identity pill. */
+  onOpenOrgIdentitySettings?: () => void;
   // Arms the first-run guidance trail (prototype chip → first preset
   // card sheen). Tri-state: true = brand-new user (no projects), false =
   // existing user, undefined = projects still loading — the guide neither
@@ -296,6 +366,8 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
   {
     workspaceContext = null,
     active = true,
+    orgIdentity,
+    onOpenOrgIdentitySettings,
     prompt,
     onPromptChange,
     onSubmit,
@@ -1261,6 +1333,13 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
         <PixelScanLogo className="home-hero__logo home-hero__logo--tiles" />
       </span>
 
+      {/* Design Hub redesign: re-adds a heading below the animated wordmark
+          (removed in #5517) plus the new org-identity aware subtitle. */}
+      <div className="home-hero__dh-heading">
+        <h1 className="home-hero__dh-title">{t('homeHero.dh.title')}</h1>
+        <p className="home-hero__dh-subtitle">{t('homeHero.dh.subtitle')}</p>
+      </div>
+
       {/* #5517 wraps the input card + workdir row into one visible composer
           card so they read as a single surface. */}
       <div className="home-hero__composer-card">
@@ -1968,6 +2047,19 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
                 onClearActiveChip();
               }}
             />
+            <button
+              type="button"
+              className="home-hero__dh-org-pill"
+              data-testid="home-hero-org-identity-pill"
+              onClick={onOpenOrgIdentitySettings}
+            >
+              <span className="home-hero__dh-org-pill-dot" aria-hidden />
+              <span>
+                {orgIdentity?.name
+                  ? t('homeHero.dh.orgPillWithName', { name: orgIdentity.name })
+                  : t('homeHero.dh.orgPillEmpty')}
+              </span>
+            </button>
             {footerInputFields.length > 0 ? (
               <div className="home-hero__footer-options" data-testid="home-hero-footer-options">
                 {footerInputFields.map((field) => (
@@ -1989,6 +2081,23 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
             ) : null}
           </div>
           <div className="home-hero__foot-right">
+            {onDesignSystemChange ? (
+              <DesignSystemPicker
+                variant="home"
+                designSystems={designSystems}
+                selectedId={selectedDesignSystemId}
+                onChange={onDesignSystemChange}
+              />
+            ) : null}
+            <button
+              type="button"
+              className="home-hero__dh-model-pill"
+              data-testid="home-hero-model-pill"
+              disabled
+            >
+              <span className="home-hero__dh-model-pill-dot" aria-hidden />
+              <span>{t('homeHero.dh.defaultModel')}</span>
+            </button>
             <ComposerModePicker
               mode={sessionMode}
               onModeChange={(next) => {
@@ -2027,19 +2136,8 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
         </div>
       </div>
 
-      {onDesignSystemChange || onPickWorkingDir ? (
+      {onPickWorkingDir ? (
         <div className="home-hero__workdir-row">
-          {onDesignSystemChange ? (
-            <DesignSystemPicker
-              variant="home"
-              designSystems={designSystems}
-              selectedId={selectedDesignSystemId}
-              onChange={onDesignSystemChange}
-            />
-          ) : null}
-          {onDesignSystemChange && onPickWorkingDir ? (
-            <span className="home-hero__workdir-divider" aria-hidden />
-          ) : null}
           {onPickWorkingDir ? (
             <WorkingDirPicker
               className="home-hero__working-dir-picker"
@@ -2074,6 +2172,34 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
           ) : null}
         </div>
       ) : null}
+      </div>
+
+      <div className="home-hero__dh-start">
+        <div className="home-hero__dh-start-head">
+          <span className="home-hero__dh-start-label">{t('homeHero.dh.startHere')}</span>
+          <span className="home-hero__dh-start-rule" aria-hidden />
+        </div>
+        <div className="home-hero__dh-start-grid">
+          {HOME_START_CARDS.map((card) => (
+            <button
+              key={card.id}
+              type="button"
+              className="home-hero__dh-start-card"
+              onClick={() => {
+                onPromptChange(t(card.promptKey as never));
+                requestAnimationFrame(() => editorRef.current?.focus());
+              }}
+            >
+              <span className="home-hero__dh-start-card-icon" aria-hidden>
+                {card.icon}
+              </span>
+              <span className="home-hero__dh-start-card-copy">
+                <span className="home-hero__dh-start-card-title">{t(card.titleKey as never)}</span>
+                <span className="home-hero__dh-start-card-desc">{t(card.descKey as never)}</span>
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {recommendationSlot}
