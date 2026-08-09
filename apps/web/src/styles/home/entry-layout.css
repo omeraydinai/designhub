@@ -8525,3 +8525,21 @@ button.entry-nav-rail__menu-credits-row:active:not(:disabled) {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
+
+/* Design Hub: animated wordmark portalled into the top workspace-tab bar
+   (see EntryShell's top-logo portal). .home-hero__logo--tiles already
+   supplies position:relative + the engine's 1705:291 aspect-ratio; this
+   just fixes it in the bar, clear of the rail-toggle button (~11-87px). */
+.entry-top-logo-wrap {
+  position: fixed;
+  top: 0;
+  left: 96px;
+  z-index: 130;
+  height: 44px;
+  display: flex;
+  align-items: center;
+}
+.entry-top-logo {
+  width: 150px;
+  height: auto;
+}

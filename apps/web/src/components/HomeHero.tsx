@@ -54,7 +54,6 @@ import {
   type HomeHeroChip,
 } from './home-hero/chips';
 import { homeHeroChipLabel } from './home-hero/chip-labels';
-import { PixelScanLogo } from './home-hero/PixelScanLogo';
 import { ScenarioArt } from './home-hero/ScenarioArt';
 import { useEdgeAutoScroll, EdgeScrollZones } from './home-hero/EdgeAutoScroll';
 import {
@@ -1324,17 +1323,9 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
 
   return (
     <section ref={homeHeroRef} className="home-hero" data-testid="home-hero">
-      {/* #5517 hero header: the OpenDesign logotype replaces the small
-          brand-mark + name pair, and the tagline subtitle is dropped. The
-          static wordmark is now a WebGL pixel-scan effect (round 7) — the
-          title heading below it is dropped too, since the animated wordmark
-          alone carries the brand moment. */}
-      <span className="home-hero__logo-wrap">
-        <PixelScanLogo className="home-hero__logo home-hero__logo--tiles" />
-      </span>
-
-      {/* Design Hub redesign: re-adds a heading below the animated wordmark
-          (removed in #5517) plus the new org-identity aware subtitle. */}
+      {/* Design Hub: the animated wordmark now lives in the top workspace
+          bar (see EntryShell's top-logo portal) instead of here above the
+          heading. */}
       <div className="home-hero__dh-heading">
         <h1 className="home-hero__dh-title">{t('homeHero.dh.title')}</h1>
         <p className="home-hero__dh-subtitle">{t('homeHero.dh.subtitle')}</p>

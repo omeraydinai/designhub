@@ -96,6 +96,7 @@ import { DesignsTab } from './DesignsTab';
 import { DesignSystemsTab } from './DesignSystemsTab';
 import { BrandsTab } from './BrandsTab';
 import { EntryNavRail, type EntryView as EntryViewKind } from './EntryNavRail';
+import { PixelScanLogo } from './home-hero/PixelScanLogo';
 import { ProjectSearchModal } from './ProjectSearchModal';
 import { LibrarySection } from './LibrarySection';
 import { UpdaterPopup } from './UpdaterPopup';
@@ -1559,6 +1560,18 @@ export function EntryShell({
               lives in the rail footer, and everything below is fixed-position
               or portalled so it occupies no layout space here. */}
           <WhatsNewPopup active={view === 'home'} />
+          {/* Design Hub: the animated wordmark moved from above the hero
+             heading into the top workspace bar (portalled the same way as
+             the DeepSeek badge below, since that bar is shared chrome
+             outside this component's own tree). */}
+          {view === 'home' && typeof document !== 'undefined'
+            ? createPortal(
+              <span className="entry-top-logo-wrap">
+                <PixelScanLogo className="entry-top-logo home-hero__logo--tiles" />
+              </span>,
+              document.body,
+            )
+            : null}
           {view === 'home'
             && deepSeekV4FlashCampaignAudience !== 'unknown'
             && typeof document !== 'undefined'
