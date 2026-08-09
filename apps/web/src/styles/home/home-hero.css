@@ -3949,6 +3949,12 @@
   }
 }
 .home-hero__dh-start-card {
+  /* Override the global `button { height: 36px }` — the two-line
+     description made the card taller than that fixed height, and with
+     overflow left visible the extra content spilled past the card's
+     bottom edge into the grid row below instead of growing the card. */
+  height: auto;
+  min-height: 0;
   display: flex;
   align-items: flex-start;
   gap: 10px;
