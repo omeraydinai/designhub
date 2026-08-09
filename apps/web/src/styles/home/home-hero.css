@@ -1138,6 +1138,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  row-gap: 8px;
+  /* nowrap + visible overflow used to let foot-left's content spill past
+     its allotted flex share and visually collide with foot-right
+     whenever the two groups' combined natural width didn't fit (the
+     Design Hub org-identity pill made that the common case, not an
+     edge case, and how often the template picker's own trigger is in
+     its expanded vs. icon-only state shifts the exact tipping point).
+     Wrapping unconditionally means foot-right drops to its own row
+     instead of overlapping, regardless of viewport width or the
+     template picker's current width. */
+  flex-wrap: wrap;
   border-top: 0;
   padding-top: 8px;
 }
@@ -1145,9 +1156,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  row-gap: 8px;
   min-width: 0;
   flex: 1 1 auto;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   overflow: visible;
 }
 .home-hero__foot-right {
