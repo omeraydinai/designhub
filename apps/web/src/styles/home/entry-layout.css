@@ -8539,7 +8539,11 @@ button.entry-nav-rail__menu-credits-row:active:not(:disabled) {
   display: flex;
   align-items: center;
 }
+/* Sized by height, not width: the host's 1705:291 aspect-ratio means a
+   flat doubling of the old 150px width (-> ~300px) would stand ~51px
+   tall, taller than the 44px bar itself. 38px is the largest height that
+   still clears the bar with a hair of breathing room top/bottom. */
 .entry-top-logo {
-  width: 150px;
-  height: auto;
+  width: auto;
+  height: 38px;
 }
