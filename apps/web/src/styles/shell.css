@@ -2468,3 +2468,29 @@ a.avatar-item:visited {
 .split-resize-handle:focus-visible {
   outline: none;
 }
+
+/* Design Hub dark EntryShell: the workspace tab-strip / app-chrome header
+   sits as a *sibling* of .entry-shell--dark (not a descendant — it's shared
+   chrome above the light project editor too), so the entry-shell dark scope
+   never reaches it. Left alone it renders the light theme's white --bg (or
+   loses its background entirely in the pinned-Home-tab state), showing as a
+   stray white strip above the dark hero. Scope a dark override off `body`
+   via :has() so only pages currently showing the dark EntryShell are
+   affected — the light project editor keeps its normal white header.
+*/
+body:has(.entry-shell--dark) {
+  background: #050040;
+}
+body:has(.entry-shell--dark) .app-chrome-header,
+body:has(.entry-shell--dark) .workspace-tabs-strip,
+body:has(.entry-shell--dark) .workspace-tab {
+  background: transparent;
+  border-color: transparent;
+}
+body:has(.entry-shell--dark) .workspace-tab__rail-toggle {
+  color: rgba(255, 255, 255, 0.7);
+}
+body:has(.entry-shell--dark) .workspace-tab__rail-toggle:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
