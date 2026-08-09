@@ -72,6 +72,18 @@ body::before {
   background: var(--app-wash);
 }
 
+/* Design Hub dark EntryShell: this pastel wash paints behind the *entire*
+   page (fixed, z-index:-1), including the thin gap above/around the
+   workspace tab header where nothing else paints over it. Its base layer
+   defaults to --wash-base: #fff, which showed as a stray white strip
+   above the dark hero. Flatten it to the hero's own navy instead of the
+   generic [data-theme='dark'] wash — that token drives the whole app's
+   dark mode and isn't scoped to just this page.
+*/
+body:has(.entry-shell--dark) {
+  --app-wash: linear-gradient(#050040, #050040);
+}
+
 /* Windows desktop windows are opaque, so blend the existing neutral surfaces
    instead of painting the web-only pastel wash. Keep this scoped to the
    native win32 host: browser and macOS surfaces retain their materials. */
