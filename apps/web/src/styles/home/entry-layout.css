@@ -45,9 +45,19 @@
 /* Flat, opaque navy — matches the top workspace-tab bar exactly instead
    of the frosted-glass 7%-white panel (which, over the hero's purple
    radial-blob veil, read as a visibly lighter/bluer surface than the
-   flat top bar). */
+   flat top bar). The glass-refract-ring tokens below paint the panel's
+   ::after stroke (see .entry-nav-rail__panel::after); they default to
+   the LIGHT theme's near-opaque white (0.6/0.18/0.25 alpha) because this
+   custom .entry-shell--dark scope is separate from the app's real
+   [data-theme='dark'] system that halves them — left alone they drew a
+   visible white outline around the navy panel. Drop them instead of just
+   halving, since a light ring on flat navy reads as a stray line either
+   way. */
 .entry-shell--dark .entry-nav-rail__panel {
   --rail-surface: #050040;
+  --glass-refract-ring-top: transparent;
+  --glass-refract-ring-edge: transparent;
+  --glass-refract-ring-bottom: transparent;
 }
 
 
