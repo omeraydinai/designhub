@@ -1166,7 +1166,18 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 0 0 auto;
+  row-gap: 8px;
+  /* On narrow viewports this group's own children (design system,
+     model pill, mode picker, execution switcher, submit) add up to
+     wider than the composer card even after .home-hero__input-foot
+     wraps foot-right onto its own row — flex:0 0 auto with no wrap on
+     this element let that combined width overflow past the card,
+     clipping the submit button off-screen on phones instead of
+     shrinking or wrapping. */
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
 }
 .home-hero__execution-switcher {
   display: inline-flex;

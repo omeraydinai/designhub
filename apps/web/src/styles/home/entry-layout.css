@@ -8547,3 +8547,11 @@ button.entry-nav-rail__menu-credits-row:active:not(:disabled) {
   width: auto;
   height: 38px;
 }
+/* At 320px (the narrowest common phone width) the 38px-tall logo's right
+   edge lands 1px from the viewport edge — no margin for a slightly
+   narrower device or any stray padding. Shrink it well before that. */
+@media (max-width: 480px) {
+  .entry-top-logo {
+    height: 24px;
+  }
+}
