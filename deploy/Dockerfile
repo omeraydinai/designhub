@@ -84,6 +84,14 @@ RUN apk add --no-cache tini poppler-utils bash git && \
     addgroup -S -g 1001 open-design && \
     adduser -S -D -H -u 1001 -G open-design open-design
 
+# Design Hub: OpenAI Codex CLI, one of the daemon's already-supported
+# runtime agent adapters (apps/daemon/src/runtimes/defs/codex.ts) — the
+# adapter code was already there, it just had no `codex` binary on PATH
+# to spawn. Installed at build time since the runtime filesystem is
+# read-only (deploy/docker-compose.yml). Auth (OPENAI_API_KEY /
+# `codex login`) is a separate, per-deployment step — not baked in here.
+RUN npm install -g @openai/codex
+
 WORKDIR /app
 COPY --from=build --chown=open-design:open-design /app/deploy/daemon ./apps/daemon
 COPY --from=build --chown=open-design:open-design /app/apps/web/out ./apps/web/out
