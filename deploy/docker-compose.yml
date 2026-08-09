@@ -18,6 +18,13 @@ services:
       OD_API_TOKEN: ${OD_API_TOKEN:-}
       OD_DISABLE_API_AUTH: ${OPEN_DESIGN_DISABLE_API_AUTH:-}
       OD_CODEX_SANDBOX: ${OD_CODEX_SANDBOX:-}
+      # Design Hub: the runtime filesystem is read-only except this
+      # service's own /app/.od volume, so Codex CLI's default config/
+      # credentials dir (~/.codex) has nowhere to persist a login. Point
+      # it at the writable volume instead — apps/daemon/src/app-config.ts
+      # already allowlists CODEX_HOME as a per-agent env override, this
+      # just sets the default so `codex login` works out of the box.
+      CODEX_HOME: /app/.od/codex-home
     ports:
       - "127.0.0.1:${OPEN_DESIGN_PORT:-7456}:7456"
     volumes:
