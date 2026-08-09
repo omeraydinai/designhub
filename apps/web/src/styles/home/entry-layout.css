@@ -42,8 +42,12 @@
     linear-gradient(160deg, #19006a 0%, #0d0257 46%, #050040 100%);
   color: var(--text);
 }
+/* Flat, opaque navy — matches the top workspace-tab bar exactly instead
+   of the frosted-glass 7%-white panel (which, over the hero's purple
+   radial-blob veil, read as a visibly lighter/bluer surface than the
+   flat top bar). */
 .entry-shell--dark .entry-nav-rail__panel {
-  --rail-surface: rgba(255, 255, 255, 0.07);
+  --rail-surface: #050040;
 }
 
 
