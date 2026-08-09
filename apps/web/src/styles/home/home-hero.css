@@ -3987,9 +3987,16 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--text-strong);
+  white-space: normal;
 }
+/* The card is a <button>; a global button reset forces child text to
+   white-space: nowrap, which pushed this full-sentence description up
+   against (and, on narrower cards, past) the card's right edge instead
+   of wrapping like a normal paragraph. */
 .home-hero__dh-start-card-desc {
   font-size: 12px;
   line-height: 1.4;
   color: var(--text-soft);
+  white-space: normal;
+  overflow-wrap: break-word;
 }
