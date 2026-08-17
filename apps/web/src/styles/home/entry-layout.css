@@ -31,6 +31,21 @@
   --text-muted: rgba(255, 255, 255, 0.6);
   --text-soft: rgba(255, 255, 255, 0.5);
   --text-faint: rgba(255, 255, 255, 0.38);
+  /* Accent/selected tokens: the light-theme defaults (#353535 etc.) never
+     got overridden here, so anything keyed to them — the active nav item's
+     text chief among them — rendered near-invisible (~1.6:1) against this
+     scope's navy panels. Selected reuses --text-strong's white rather than
+     inventing a second "loud" tone, matching how light mode keeps --selected
+     close to its own --text-strong; --brand-text keeps the app's real dark
+     theme's periwinkle so brand-colored text isn't just another white. */
+  --accent: #ffffff;
+  --accent-strong: #ffffff;
+  --accent-tint: rgba(255, 255, 255, 0.12);
+  --accent-soft: rgba(255, 255, 255, 0.16);
+  --accent-hover: #ffffff;
+  --selected: #ffffff;
+  --selected-soft: rgba(255, 255, 255, 0.16);
+  --brand-text: #8091ff;
   /* Tailwind v4's Turbopack CSS parser chokes on a 3-item stacked value here
      (2 radial-gradients + 1 linear-gradient all compile individually paired
      with the linear-gradient, but all three together trip a CssSyntaxError
