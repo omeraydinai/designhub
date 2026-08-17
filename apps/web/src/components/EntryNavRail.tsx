@@ -53,7 +53,6 @@ import { GITHUB_STARS_FALLBACK_LABEL, formatStars, useGithubStars } from './useG
 import { PlanWordmark, planBadgeTierForWorkspace } from './PlanWordmark';
 import { RemixIcon } from './RemixIcon';
 import { InviteDialog } from './InviteDialog';
-import { MessageCenter } from './MessageCenter';
 import type { EntrySettingsSection } from './EntrySettingsMenu';
 import { useI18n } from '../i18n';
 import { useDismissOnOutsideInteraction } from '../hooks/useDismissOnOutsideInteraction';
@@ -579,7 +578,6 @@ export function EntryNavRail({
   const analyticsPage = entryViewToTracking(view);
   const workspaceDimensions = workspaceAnalyticsDimensions(context);
   const brandLabel = t('app.brand');
-  const communityLabel = t('pluginsHome.title');
   // #5517 renamed the rail's first item from 最近 (Recents) to 首页 (Home) —
   // the key keeps its historical name, the VALUE now reads Home in every
   // locale (polish round 2, ref 1db2d00c2).
@@ -656,17 +654,7 @@ export function EntryNavRail({
       ...workspaceDimensions,
     });
   }, [accountOpen, analytics.track, analyticsPage, workspaceDimensions.workspace_key]);
-  // Message-center panel (opened from the account menu's 消息中心 row) and its
-  // unread count, which drives the red dot on the account avatar.
-  const [messageCenterOpen, setMessageCenterOpen] = useState(false);
-  const [messageUnreadCount, setMessageUnreadCount] = useState(0);
-  // Where the message-center panel returns keyboard focus on close. The
-  // signed-in 消息中心 row cannot be it: the account menu unmounts the row before
-  // the panel opens, so the account trigger it hangs off is the stable control.
-  // Signed-out has no menu — the rail item itself stays mounted.
   const accountTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const messageCenterRailRef = useRef<HTMLButtonElement | null>(null);
-  const messageCenterReturnFocusRef = context ? accountTriggerRef : messageCenterRailRef;
   // Sign-out confirm gate (recvqgMWpJZqhL): the menu item only ARMS the
   // confirmation dialog; the real logout chain runs on explicit confirm.
   const [confirmSignOut, setConfirmSignOut] = useState(false);
@@ -1085,9 +1073,6 @@ export function EntryNavRail({
             >
               <span className="entry-nav-rail__account-avatar" aria-hidden>
                 {accountInitial}
-                {messageUnreadCount > 0 ? (
-                  <span className="entry-nav-rail__account-avatar-dot" data-testid="account-avatar-unread-dot" />
-                ) : null}
               </span>
               <span className="entry-nav-rail__account-name">{accountName}</span>
               {/* #5517: the plan badge replaces the chevron when a tier is
@@ -1169,24 +1154,6 @@ export function EntryNavRail({
                     }}
                   >
                     <Icon name="settings" size={15} /> {t('entry.accountSettings')}
-                  </button>
-                  <button
-                    type="button"
-                    className="entry-nav-rail__menu-item"
-                    role="menuitem"
-                    aria-haspopup="dialog"
-                    aria-expanded={messageCenterOpen}
-                    data-testid="account-menu-message-center"
-                    onClick={() => {
-                      trackAccountAction('message_center');
-                      setAccountOpen(false);
-                      setMessageCenterOpen(true);
-                    }}
-                  >
-                    <Icon name="bell" size={15} /> {t('messageCenter.title')}
-                    {messageUnreadCount > 0 ? (
-                      <span className="entry-nav-rail__menu-item-dot" aria-hidden />
-                    ) : null}
                   </button>
                   {/* #5517's account menu goes 设置 → GitHub 帮助 → 功能建议 → 社交行,
                       with no theme row, no language submenu, and no divider in
@@ -1356,16 +1323,6 @@ export function EntryNavRail({
         >
           <Icon name="home" size={16} />
         </NavButton>
-        <NavButton
-          active={view === 'community'}
-          ariaLabel={communityLabel}
-          label={communityLabel}
-          onClick={() => selectView('community')}
-          testId="entry-nav-community"
-        >
-          <Icon name="globe" size={16} />
-        </NavButton>
-
         {context ? (
           <div className="entry-nav-rail__team-section">
             <div className="entry-nav-rail__team-wrap">
@@ -1533,15 +1490,6 @@ export function EntryNavRail({
             >
               <Icon name="palette" size={16} />
             </NavButton>
-            <NavButton
-              active={view === 'plugins'}
-              ariaLabel={t('entry.navPlugins')}
-              label={t('entry.navPlugins')}
-              onClick={() => selectView('plugins')}
-              testId="entry-nav-plugins"
-            >
-              <Icon name="puzzle" size={16} />
-            </NavButton>
             {/* Product decision (2026-07-20): 成员 and 数据大盘 leave the rail
                 entirely — both surfaces live in B's console and the rail should
                 not advertise them. Workspace 设置 stays, and still links OUT to
@@ -1584,15 +1532,6 @@ export function EntryNavRail({
             >
               <Icon name="palette" size={16} />
             </NavButton>
-            <NavButton
-              active={view === 'plugins'}
-              ariaLabel={t('entry.navPlugins')}
-              label={t('entry.navPlugins')}
-              onClick={() => selectView('plugins')}
-              testId="entry-nav-plugins"
-            >
-              <Icon name="puzzle" size={16} />
-            </NavButton>
             {/* recvq4hGF7BJkI removed this entry while the rail footer still
                 carried EntryShell's `entry-settings-chip` for the signed-out
                 case. #5517 then dropped that chip (the footer only hosts the
@@ -1616,23 +1555,6 @@ export function EntryNavRail({
             >
               <Icon name="settings" size={16} />
             </NavButton>
-            {/* Signed-out has no account menu (where the 消息中心 row lives when
-                signed in), which left the message panel with no opener at all.
-                It rides here as the rail item under 设置. */}
-            <NavButton
-              ariaLabel={t('messageCenter.title')}
-              label={t('messageCenter.title')}
-              onClick={() => setMessageCenterOpen(true)}
-              testId="entry-nav-message-center"
-              buttonRef={messageCenterRailRef}
-              ariaHasPopup="dialog"
-              ariaExpanded={messageCenterOpen}
-            >
-              <Icon name="bell" size={16} />
-              {messageUnreadCount > 0 ? (
-                <span className="entry-nav-rail__btn-dot" aria-hidden />
-              ) : null}
-            </NavButton>
           </>
         )}
       </div>
@@ -1650,17 +1572,6 @@ export function EntryNavRail({
         </div>
       ) : null}
       </div>
-
-      {/* Panel + unread polling live here (outside the hover menu, which
-          unmounts when closed); the 消息中心 menu row above just opens it. */}
-      <MessageCenter
-        hideTrigger
-        returnFocusRef={messageCenterReturnFocusRef}
-        open={messageCenterOpen}
-        onOpenChange={setMessageCenterOpen}
-        onUnreadCountChange={setMessageUnreadCount}
-        onOpenNotificationSettings={onOpenSettings ? () => onOpenSettings('notifications') : undefined}
-      />
 
       <InviteDialog
         open={inviteOpen}

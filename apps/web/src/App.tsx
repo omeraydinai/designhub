@@ -50,7 +50,6 @@ import {
   type ProjectRenameFenceToken,
   type ProjectNameAuthorityResolution,
 } from './components/ProjectView';
-import { AmrArtifactUpgradeGate } from './components/AmrArtifactUpgradeGate';
 import { AmrArtifactUpgradeHomeCard } from './components/AmrArtifactUpgradeHomeCard';
 import { TooltipLayer } from './components/TooltipLayer';
 import { UpdateDialog } from './components/UpdateDialog';
@@ -5131,27 +5130,6 @@ function AppInner() {
       )}
       <TooltipLayer />
       <UpdateDialog />
-      <AmrArtifactUpgradeGate
-        homeVisible={route.kind === 'home' && route.view === 'home'}
-        activeProjectId={route.kind === 'project' ? route.projectId : null}
-        activeConversationId={
-          route.kind === 'project' ? route.conversationId ?? null : null
-        }
-        activeFileName={route.kind === 'project' ? route.fileName : null}
-        plan={resolvedAmrPlan}
-        planResolved={
-          amrLoginStatus !== null
-          && (amrLoginStatus.loggedIn === false || resolvedAmrPlan !== null)
-        }
-        profile={amrLoginStatus?.profile ?? null}
-        metricsConsent={config.telemetry?.metrics === true}
-        installationId={config.installationId}
-        onHomeOfferChange={
-          amrArtifactUpgradeHomeMock
-            ? undefined
-            : setAmrArtifactUpgradeHomeOffer
-        }
-      />
       <AnimatePresence>
       {settingsOpen ? (
         renderSettingsSurface('modal')
