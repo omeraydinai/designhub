@@ -49,7 +49,6 @@ import { resetCloudSignInTipDismissal } from './CloudSignInTip';
 import { SignOutConfirmDialog } from './SignOutConfirmDialog';
 import { notifyAmrLoginStatusChanged } from './amrLoginPolling';
 import { Icon } from './Icon';
-import { GITHUB_STARS_FALLBACK_LABEL, formatStars, useGithubStars } from './useGithubStars';
 import { PlanWordmark, planBadgeTierForWorkspace } from './PlanWordmark';
 import { RemixIcon } from './RemixIcon';
 import { InviteDialog } from './InviteDialog';
@@ -81,12 +80,6 @@ import {
   workspaceAnalyticsDimensions,
 } from '../analytics/workspace';
 
-const REPO_URL = 'https://github.com/nexu-io/open-design';
-const GITHUB_HELP_URL = `${REPO_URL}/issues/new`;
-const GITHUB_FEATURE_URL = `${REPO_URL}/pulls`;
-const DISCORD_URL = 'https://discord.gg/mHAjSMV6gz';
-const X_URL = 'https://x.com/OpenDesignHQ';
-const CONTACT_EMAIL_URL = 'mailto:support@open-design.ai';
 const externalLinkProps = { target: '_blank', rel: 'noreferrer noopener' } as const;
 
 // Last directory this shell successfully read. `coalescedGet` only collapses
@@ -658,7 +651,6 @@ export function EntryNavRail({
   // Sign-out confirm gate (recvqgMWpJZqhL): the menu item only ARMS the
   // confirmation dialog; the real logout chain runs on explicit confirm.
   const [confirmSignOut, setConfirmSignOut] = useState(false);
-  const githubStars = useGithubStars();
   // Signed-in account email for the menu head (#5517 shows it under the
   // display name). The workspace context carries no email, so lazily read the
   // vela login-status projection the first time the menu opens — never on
@@ -1155,98 +1147,12 @@ export function EntryNavRail({
                   >
                     <Icon name="settings" size={15} /> {t('entry.accountSettings')}
                   </button>
-                  {/* #5517's account menu goes 设置 → GitHub 帮助 → 功能建议 → 社交行,
-                      with no theme row, no language submenu, and no divider in
-                      between. Both controls still have a home in 设置·通用 (theme
-                      segmented control + language picker), so dropping the
-                      duplicates here costs no capability. */}
-                  <a
-                    className="entry-nav-rail__menu-item"
-                    role="menuitem"
-                    href={GITHUB_HELP_URL}
-                    {...externalLinkProps}
-                    onClick={() => {
-                      trackAccountAction('github_help');
-                      setAccountOpen(false);
-                    }}
-                  >
-                    <Icon name="comment" size={15} /> {t('entry.accountGithubHelp')}
-                  </a>
-                  <a
-                    className="entry-nav-rail__menu-item"
-                    role="menuitem"
-                    href={GITHUB_FEATURE_URL}
-                    {...externalLinkProps}
-                    onClick={() => {
-                      trackAccountAction('feature_request');
-                      setAccountOpen(false);
-                    }}
-                  >
-                    <Icon name="sparkles" size={15} /> {t('entry.accountFeatureRequest')}
-                  </a>
-                  {/* #5517: the GitHub/Discord/X/mail badges move off the rail
-                      footer into a compact social row inside the account menu. */}
-                  <div className="entry-nav-rail__menu-social">
-                    <a
-                      className="entry-nav-rail__menu-social-btn"
-                      role="menuitem"
-                      href={REPO_URL}
-                      {...externalLinkProps}
-                      aria-label={`GitHub · ${githubStars == null ? GITHUB_STARS_FALLBACK_LABEL : formatStars(githubStars)} stars`}
-                      title={`GitHub · ${githubStars == null ? GITHUB_STARS_FALLBACK_LABEL : formatStars(githubStars)} stars`}
-                      onClick={() => {
-                        trackAccountAction('github');
-                        setAccountOpen(false);
-                      }}
-                    >
-                      <Icon name="github-filled" size={15} />
-                      <span className="entry-nav-rail__menu-social-count">
-                        {githubStars == null ? GITHUB_STARS_FALLBACK_LABEL : formatStars(githubStars)}
-                      </span>
-                    </a>
-                    <a
-                      className="entry-nav-rail__menu-social-btn"
-                      role="menuitem"
-                      href={DISCORD_URL}
-                      {...externalLinkProps}
-                      aria-label={t('entry.discordAria')}
-                      title={t('entry.discordAria')}
-                      onClick={() => {
-                        trackAccountAction('discord');
-                        setAccountOpen(false);
-                      }}
-                    >
-                      <Icon name="discord" size={15} />
-                    </a>
-                    <a
-                      className="entry-nav-rail__menu-social-btn"
-                      role="menuitem"
-                      href={X_URL}
-                      {...externalLinkProps}
-                      aria-label="@OpenDesignHQ"
-                      title="@OpenDesignHQ"
-                      onClick={() => {
-                        trackAccountAction('twitter');
-                        setAccountOpen(false);
-                      }}
-                    >
-                      <span className="entry-nav-rail__menu-x" aria-hidden>X</span>
-                    </a>
-                    <a
-                      className="entry-nav-rail__menu-social-btn"
-                      role="menuitem"
-                      href={CONTACT_EMAIL_URL}
-                      aria-label={t('entry.mailAria')}
-                      title={t('entry.mailAria')}
-                      onClick={() => {
-                        trackAccountAction('email');
-                        setAccountOpen(false);
-                      }}
-                    >
-                      <Icon name="mail" size={15} />
-                    </a>
-                  </div>
-                  <div className="entry-nav-rail__menu-divider" />
+                  {/* Upstream Open Design help/community links (GitHub issues,
+                      feature requests, Discord, X, support@open-design.ai)
+                      removed — they point staff at the vendor's public OSS
+                      channels instead of this deployment's own support path,
+                      which we don't have one to swap in yet (impeccable
+                      critique, 2026-08-17, P3). */}
                   <button
                     type="button"
                     className="entry-nav-rail__menu-item"

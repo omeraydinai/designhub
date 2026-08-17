@@ -26,9 +26,12 @@ describe('PLACEHOLDER_SCENARIO_DEFS bindings', () => {
   });
 
   it('only binds create templates that actually render a carousel', () => {
-    // These are the templates with hand-curated carousel lines. Other templates
-    // can still render a carousel through prompt-example or label fallbacks.
-    const SUPPORTED = new Set(['document', 'deck', 'prototype', 'wireframe', 'mobile', 'hyperframes']);
+    // These are the templates with hand-curated carousel lines — scoped to
+    // this deployment's four START HERE scenarios (impeccable critique,
+    // 2026-08-17, P2). Other templates still render a carousel through
+    // prompt-example or label fallbacks (buildPlaceholderScenarios), so
+    // narrowing this set does not strand any template's picker.
+    const SUPPORTED = new Set(['document', 'prototype']);
     const used = new Set(PLACEHOLDER_SCENARIO_DEFS.map((d) => d.chipId));
     for (const chipId of used) {
       expect(SUPPORTED.has(chipId), `chipId "${chipId}" is not a carousel template`).toBe(true);

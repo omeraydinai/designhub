@@ -83,7 +83,7 @@ const CLI_ORDER = [
 const FALLBACK_CLI_TARGETS: CliTarget[] = [
   { id: 'amr', name: 'Open Design', bin: 'vela', available: false },
   { id: 'claude', name: 'Claude Code', bin: 'claude', available: false },
-  { id: 'codex', name: 'Codex CLI', bin: 'codex', available: false },
+  { id: 'codex', name: 'Codex', bin: 'codex', available: false },
   { id: 'opencode', name: 'OpenCode', bin: 'opencode-cli', available: false },
   { id: 'cursor-agent', name: 'Cursor Agent', bin: 'cursor-agent', available: false },
   { id: 'qwen', name: 'Qwen Code', bin: 'qwen', available: false },

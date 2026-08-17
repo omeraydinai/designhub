@@ -49,20 +49,15 @@ export interface PlaceholderScenarioDef {
 // it never binds a template.
 export const PLACEHOLDER_BASE_HINT_KEY: keyof Dict = 'homeHero.carousel.hint';
 
+// Scoped to this deployment's four START HERE scenarios (see
+// HOME_START_CARDS in HomeHero.tsx) instead of generic SaaS/agency copy, so
+// the idle-composer carousel doesn't contradict the government-scenario
+// cards rendered in the same viewport (impeccable critique, 2026-08-17, P2).
 export const PLACEHOLDER_SCENARIO_DEFS: ReadonlyArray<PlaceholderScenarioDef> = [
-  { id: 'one-page-brief', textKey: 'homeHero.carousel.onePageBrief', chipId: 'document' },
-  { id: 'notes-to-deck', textKey: 'homeHero.carousel.notesToDeck', chipId: 'deck' },
-  { id: 'signup-flow', textKey: 'homeHero.carousel.signupFlow', chipId: 'prototype' },
-  { id: 'improve-brief', textKey: 'homeHero.carousel.improveBrief', chipId: 'document' },
-  { id: 'loading-animation', textKey: 'homeHero.carousel.loadingAnimation', chipId: 'hyperframes' },
-  { id: 'team-update-slides', textKey: 'homeHero.carousel.teamUpdateSlides', chipId: 'deck' },
-  { id: 'orders-dashboard', textKey: 'homeHero.carousel.ordersDashboard', chipId: 'prototype' },
-  { id: 'product-detail', textKey: 'homeHero.carousel.productDetail', chipId: 'wireframe' },
-  { id: 'case-study', textKey: 'homeHero.carousel.caseStudy', chipId: 'document' },
-  { id: 'landing-intro', textKey: 'homeHero.carousel.landingIntro', chipId: 'prototype' },
-  { id: 'pitch-deck', textKey: 'homeHero.carousel.pitchDeck', chipId: 'deck' },
-  { id: 'app-idea', textKey: 'homeHero.carousel.appIdea', chipId: 'mobile' },
-  { id: 'landing-layout', textKey: 'homeHero.carousel.landingLayout', chipId: 'wireframe' },
+  { id: 'dh-corporate-site', textKey: 'homeHero.carousel.dhCorporateSite', chipId: 'prototype' },
+  { id: 'dh-transparency-dashboard', textKey: 'homeHero.carousel.dhTransparencyDashboard', chipId: 'prototype' },
+  { id: 'dh-donation-campaign', textKey: 'homeHero.carousel.dhDonationCampaign', chipId: 'prototype' },
+  { id: 'dh-event-registration', textKey: 'homeHero.carousel.dhEventRegistration', chipId: 'document' },
 ];
 
 export interface BuildPlaceholderScenariosInput {

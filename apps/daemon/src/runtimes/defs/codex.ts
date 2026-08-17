@@ -129,7 +129,11 @@ export function codexNeedsDangerFullAccessSandbox(
 
 export const codexAgentDef = {
     id: 'codex',
-    name: 'Codex CLI',
+    // Plain product name, matching the other three kept runtimes ("Claude
+    // Code", "OpenCode", "Antigravity") — "Codex CLI" surfaced the
+    // implementation detail to non-technical staff in the composer chip
+    // (impeccable critique, 2026-08-17, P3).
+    name: 'Codex',
     bin: 'codex',
     versionArgs: ['--version'],
     // Codex exposes its installed model catalog through `debug models` on

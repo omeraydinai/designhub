@@ -140,7 +140,7 @@ function cliAgentLabel(agentId: string | null | undefined): string | null {
   const id = agentId.trim().toLowerCase();
   const labels: Record<string, string> = {
     claude: 'Claude Code',
-    codex: 'Codex CLI',
+    codex: 'Codex',
     gemini: 'Gemini CLI',
     opencode: 'OpenCode',
     qwen: 'Qwen Code',

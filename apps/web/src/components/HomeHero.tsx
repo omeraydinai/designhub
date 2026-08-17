@@ -452,6 +452,12 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
   const [libraryPickerOpen, setLibraryPickerOpen] = useState(false);
   const [projectReferenceOpen, setProjectReferenceOpen] = useState(false);
   const [figmaHelpOpen, setFigmaHelpOpen] = useState(false);
+  // Groups the composer footer's lower-priority controls (org identity,
+  // design system, default-model label) behind one disclosure instead of
+  // showing all of them next to Creation type / Mode / Run at once — the
+  // idle footer was 8 simultaneous controls wide (impeccable critique,
+  // 2026-08-17, P1).
+  const [footerSettingsOpen, setFooterSettingsOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const homeHeroRef = useRef<HTMLElement | null>(null);
   // Two-flash attention pulse on the send button; armed via the
@@ -2040,17 +2046,31 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
             />
             <button
               type="button"
-              className="home-hero__dh-org-pill"
-              data-testid="home-hero-org-identity-pill"
-              onClick={onOpenOrgIdentitySettings}
+              className="home-hero__dh-settings-toggle"
+              data-testid="home-hero-settings-toggle"
+              aria-expanded={footerSettingsOpen}
+              onClick={() => setFooterSettingsOpen((v) => !v)}
             >
-              <span className="home-hero__dh-org-pill-dot" aria-hidden />
-              <span>
-                {orgIdentity?.name
-                  ? t('homeHero.dh.orgPillWithName', { name: orgIdentity.name })
-                  : t('homeHero.dh.orgPillEmpty')}
-              </span>
+              <Icon name="settings" size={14} />
+              <span>{t('homeHero.dh.settingsToggle')}</span>
             </button>
+            {footerSettingsOpen ? (
+              <div className="home-hero__dh-settings-group-inner">
+                <button
+                  type="button"
+                  className="home-hero__dh-org-pill"
+                  data-testid="home-hero-org-identity-pill"
+                  onClick={onOpenOrgIdentitySettings}
+                >
+                  <span className="home-hero__dh-org-pill-dot" aria-hidden />
+                  <span>
+                    {orgIdentity?.name
+                      ? t('homeHero.dh.orgPillWithName', { name: orgIdentity.name })
+                      : t('homeHero.dh.orgPillEmpty')}
+                  </span>
+                </button>
+              </div>
+            ) : null}
             {footerInputFields.length > 0 ? (
               <div className="home-hero__footer-options" data-testid="home-hero-footer-options">
                 {footerInputFields.map((field) => (
@@ -2072,23 +2092,27 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
             ) : null}
           </div>
           <div className="home-hero__foot-right">
-            {onDesignSystemChange ? (
-              <DesignSystemPicker
-                variant="home"
-                designSystems={designSystems}
-                selectedId={selectedDesignSystemId}
-                onChange={onDesignSystemChange}
-              />
+            {footerSettingsOpen ? (
+              <div className="home-hero__dh-settings-group-inner">
+                {onDesignSystemChange ? (
+                  <DesignSystemPicker
+                    variant="home"
+                    designSystems={designSystems}
+                    selectedId={selectedDesignSystemId}
+                    onChange={onDesignSystemChange}
+                  />
+                ) : null}
+                <button
+                  type="button"
+                  className="home-hero__dh-model-pill"
+                  data-testid="home-hero-model-pill"
+                  disabled
+                >
+                  <span className="home-hero__dh-model-pill-dot" aria-hidden />
+                  <span>{t('homeHero.dh.defaultModel')}</span>
+                </button>
+              </div>
             ) : null}
-            <button
-              type="button"
-              className="home-hero__dh-model-pill"
-              data-testid="home-hero-model-pill"
-              disabled
-            >
-              <span className="home-hero__dh-model-pill-dot" aria-hidden />
-              <span>{t('homeHero.dh.defaultModel')}</span>
-            </button>
             <ComposerModePicker
               mode={sessionMode}
               onModeChange={(next) => {
@@ -2126,6 +2150,11 @@ export const HomeHero = forwardRef<HomeHeroHandle, Props>(function HomeHero(
           </div>
         </div>
       </div>
+      {/* Pressing Run hands the prompt to an agent that can write and deploy
+          a live artifact with no other confirmation step on this screen —
+          the entry point for a first, potentially high-stakes AI action had
+          no reassurance anywhere (impeccable critique, 2026-08-17, P1). */}
+      <p className="home-hero__dh-reassurance">{t('homeHero.dh.reviewReassurance')}</p>
 
       {onPickWorkingDir ? (
         <div className="home-hero__workdir-row">

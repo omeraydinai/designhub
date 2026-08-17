@@ -1281,6 +1281,8 @@ export interface Dict {
   'homeHero.dh.orgPillEmpty': string;
   'homeHero.dh.orgPillWithName': string;
   'homeHero.dh.defaultModel': string;
+  'homeHero.dh.settingsToggle': string;
+  'homeHero.dh.reviewReassurance': string;
   'homeHero.dh.startHere': string;
   'homeHero.dh.startCards.corporateSite.title': string;
   'homeHero.dh.startCards.corporateSite.desc': string;
@@ -1321,6 +1323,10 @@ export interface Dict {
   'homeHero.carousel.pitchDeck': string;
   'homeHero.carousel.appIdea': string;
   'homeHero.carousel.landingLayout': string;
+  'homeHero.carousel.dhCorporateSite': string;
+  'homeHero.carousel.dhTransparencyDashboard': string;
+  'homeHero.carousel.dhDonationCampaign': string;
+  'homeHero.carousel.dhEventRegistration': string;
   'homeHero.skills': string;
   'homeHero.addMenu': string;
   'homeHero.addPlugin': string;
