@@ -2469,28 +2469,60 @@ a.avatar-item:visited {
   outline: none;
 }
 
-/* Design Hub dark EntryShell: the workspace tab-strip / app-chrome header
-   sits as a *sibling* of .entry-shell--dark (not a descendant — it's shared
-   chrome above the light project editor too), so the entry-shell dark scope
-   never reaches it. Left alone it renders the light theme's white --bg (or
-   loses its background entirely in the pinned-Home-tab state), showing as a
-   stray white strip above the dark hero. Scope a dark override off `body`
-   via :has() so only pages currently showing the dark EntryShell are
-   affected — the light project editor keeps its normal white header.
+/* Design Hub institutional navy chrome: the workspace tab-strip / app-chrome
+   header stays navy on every route now, not just while the dark EntryShell
+   is mounted (Home only). The header is shared chrome that sits *above*
+   ProjectView too (see App.tsx workspace-shell composition) — it does not
+   follow [data-theme] (FORCED_APP_THEME pins the whole app to 'light'; see
+   state/appearance.ts), so without this override it fell back to the light
+   theme's white --bg the moment a project was open. Only the frame
+   (header, tab strip, chrome buttons) is repainted here; canvas content
+   below it (file viewer, chat, editor) is untouched and keeps its normal
+   light --text/--bg tokens. The active tab keeps its own light --bg-panel
+   chip (declared below, higher specificity) so it still reads as
+   "selected" against the navy strip.
 */
-body:has(.entry-shell--dark) {
+body {
   background: #050040;
 }
-body:has(.entry-shell--dark) .app-chrome-header,
-body:has(.entry-shell--dark) .workspace-tabs-strip,
-body:has(.entry-shell--dark) .workspace-tab {
+.app-chrome-header,
+.workspace-tabs-strip,
+.workspace-tab {
   background: transparent;
   border-color: transparent;
 }
-body:has(.entry-shell--dark) .workspace-tab__rail-toggle {
+.app-chrome-back,
+.settings-icon-btn,
+.workspace-tabs-new-btn,
+.workspace-tabs-icon-btn,
+.workspace-tab,
+.workspace-tab__close,
+.workspace-tab__rail-toggle {
   color: rgba(255, 255, 255, 0.7);
 }
-body:has(.entry-shell--dark) .workspace-tab__rail-toggle:hover:not(:disabled) {
+.app-chrome-back:hover:not(:disabled),
+.settings-icon-btn:hover:not(:disabled),
+.workspace-tabs-new-btn:hover:not(:disabled),
+.workspace-tabs-icon-btn:hover:not(:disabled),
+.workspace-tabs-icon-btn.is-active,
+.workspace-tab:hover:not(.is-active),
+.workspace-tab__close:hover,
+.workspace-tab__rail-toggle:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.12);
+  border-color: transparent;
+  color: #fff;
+}
+.workspace-tab__divider {
+  background: rgba(255, 255, 255, 0.2);
+}
+/* The pinned Home tab keeps `background: transparent` even while
+   `.is-active` (it never gets the light --bg-panel chip other active tabs
+   get), so its icon (which inherits color via currentColor) needs its own
+   light-on-navy override at higher specificity than plain `.is-active`. */
+.workspace-tab.is-pinned {
+  color: rgba(255, 255, 255, 0.7);
+}
+.workspace-tab.is-pinned:hover,
+.workspace-tab.is-pinned.is-active {
   color: #fff;
 }
