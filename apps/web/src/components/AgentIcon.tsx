@@ -15,26 +15,8 @@ const ICON_EXT: Record<string, 'svg' | 'png'> = {
   amr: 'svg',
   claude: 'svg',
   codex: 'svg',
-  gemini: 'svg',
   opencode: 'svg',
-  'cursor-agent': 'svg',
-  copilot: 'svg',
-  qwen: 'svg',
-  qoder: 'svg',
-  deepseek: 'svg',
-  reasonix: 'svg',
-  mimo: 'svg',
-  hermes: 'svg',
-  'grok-build': 'svg',
-  kimi: 'svg',
-  pi: 'svg',
-  kiro: 'svg',
-  kilo: 'svg',
-  vibe: 'svg',
   antigravity: 'svg',
-  aider: 'png',
-  'trae-cli': 'png',
-  devin: 'png',
 };
 
 // SVG marks that are single-color silhouettes (no baked brand colors).
@@ -45,14 +27,7 @@ const ICON_EXT: Record<string, 'svg' | 'png'> = {
 // of `currentColor`, so if anything outside this component ever loads
 // the asset through `<img>` it still renders as a legible dark mark
 // rather than collapsing to the SVG document's default black-on-…-black.
-const MONO_ICONS = new Set([
-  'cursor-agent',
-  'opencode',
-  'hermes',
-  'mimo',
-  'kilo',
-  'grok-build',
-]);
+const MONO_ICONS = new Set(['opencode']);
 
 export function AgentIcon({ id, size = 36, className }: Props) {
   const cls = 'agent-icon' + (className ? ' ' + className : '');

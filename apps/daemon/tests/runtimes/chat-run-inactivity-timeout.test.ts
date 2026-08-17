@@ -23,7 +23,6 @@ import {
   resolveChatRunInactivityTimeoutMs,
 } from '../../src/server.js';
 import { amrAgentDef } from '../../src/runtimes/defs/amr.js';
-import { copilotAgentDef } from '../../src/runtimes/defs/copilot.js';
 
 const ENV_KEY = 'OD_CHAT_RUN_INACTIVITY_TIMEOUT_MS';
 const FIRST_OUTPUT_ENV_KEY = 'OD_CHAT_RUN_FIRST_OUTPUT_TIMEOUT_MS';
@@ -208,12 +207,6 @@ describe('resolveChatRunFirstOutputTimeoutMs', () => {
     expect(() => resolveChatRunFirstOutputTimeoutMs(-1)).toThrow(
       /RuntimeAgentDef\.firstOutputTimeoutMs/,
     );
-  });
-});
-
-describe('copilotAgentDef.inactivityTimeoutMs', () => {
-  it('ships a 30-minute inactivity hint so Copilot silent-thinking phases do not trip the default watchdog (#2467)', () => {
-    expect(copilotAgentDef.inactivityTimeoutMs).toBe(THIRTY_MINUTES_MS);
   });
 });
 
