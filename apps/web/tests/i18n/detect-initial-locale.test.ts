@@ -113,10 +113,17 @@ describe('detectInitialLocale priority chain', () => {
     expect(detectInitialLocale()).toBe('pt-BR');
   });
 
-  it('falls back to en when nothing else is available', () => {
+  it('resolves to en when the browser genuinely reports English', () => {
     clearHost();
     setNavigatorLanguages([]);
 
     expect(detectInitialLocale()).toBe('en');
+  });
+
+  it("falls back to tr (this deployment's only audience) when the browser locale can't be resolved at all", () => {
+    clearHost();
+    setNavigatorLanguages(['xx-ZZ']);
+
+    expect(detectInitialLocale()).toBe('tr');
   });
 });

@@ -885,7 +885,7 @@ export const zhTW: Dict = {
   "homeHero.dh.orgPillEmpty": "Add organization identity",
   "homeHero.dh.orgPillWithName": "{name} identity",
   "homeHero.dh.defaultModel": "Default model",
-  "homeHero.dh.settingsToggle": "設定",
+  "homeHero.dh.settingsToggle": "預設值",
   "homeHero.dh.reviewReassurance": "發佈前你都會先審核結果。",
   "homeHero.dh.startHere": "Start here",
   "homeHero.dh.startCards.corporateSite.title": "Corporate site",

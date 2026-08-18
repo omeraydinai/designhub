@@ -188,6 +188,7 @@ export function BrandsTab({ onApplyDesignSystem, onOpenProject, onDesignSystemsR
             type="search"
             className={styles.search}
             placeholder={t('brand.searchPlaceholder')}
+            aria-label={t('brand.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             data-testid="brands-search"

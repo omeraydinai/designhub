@@ -8,6 +8,7 @@
 // Selection is the existing `activeChipId`: picking a wedge calls `onPick(chip)`
 // (the same handler the rail uses) and the trigger's reset calls `onClear()`.
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 import type { HomeHeroChip } from './chips';
 import { Icon } from '../Icon';
@@ -92,6 +93,12 @@ export function TemplatePicker({
   const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const radialRef = useRef<HTMLDivElement | null>(null);
+  // Roving tabindex (WAI-ARIA listbox pattern): the wedges are SVG <path>
+  // elements with no native keyboard affordance, so keyboard/screen-reader
+  // users need an explicit focus target + arrow-key navigation to reach them
+  // at all (impeccable critique, 2026-08-18, P0 — the ring was mouse-only).
+  const [focusedIndex, setFocusedIndex] = useState(0);
+  const wedgeRefs = useRef<Array<SVGPathElement | null>>([]);
 
   const toggleOpen = () => {
     setOpen((v) => {
@@ -106,9 +113,63 @@ export function TemplatePicker({
       } else {
         setAnchor(null);
       }
+      const startIndex = Math.max(
+        0,
+        templates.findIndex((chip) => chip.id === activeChipId),
+      );
+      setFocusedIndex(startIndex);
       return true;
     });
   };
+
+  // Move keyboard focus onto the wedge ring as soon as it opens, and whenever
+  // the roving index changes — arrow keys move `focusedIndex`, this effect
+  // moves the real DOM focus to match (WAI-ARIA roving-tabindex pattern).
+  useEffect(() => {
+    if (!open) return;
+    wedgeRefs.current[focusedIndex]?.focus();
+  }, [open, focusedIndex]);
+
+  function moveFocus(delta: number) {
+    if (templates.length === 0) return;
+    setFocusedIndex((current) => (current + delta + templates.length) % templates.length);
+  }
+
+  function onRingKeyDown(event: ReactKeyboardEvent<SVGSVGElement>) {
+    switch (event.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        event.preventDefault();
+        moveFocus(1);
+        return;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        event.preventDefault();
+        moveFocus(-1);
+        return;
+      case 'Home':
+        event.preventDefault();
+        setFocusedIndex(0);
+        return;
+      case 'End':
+        event.preventDefault();
+        setFocusedIndex(Math.max(0, templates.length - 1));
+        return;
+      case 'Enter':
+      case ' ': {
+        event.preventDefault();
+        if (pickDisabled) return;
+        const chip = templates[focusedIndex];
+        if (chip) {
+          onPick(chip);
+          setOpen(false);
+        }
+        return;
+      }
+      default:
+        return;
+    }
+  }
 
   const active = useMemo(
     () => templates.find((chip) => chip.id === activeChipId) ?? null,
@@ -246,6 +307,7 @@ export function TemplatePicker({
             className="home-hero__template-radial-ring"
             viewBox={`0 0 ${RING} ${RING}`}
             aria-hidden={templates.length === 0}
+            onKeyDown={onRingKeyDown}
           >
             {/* Left→right brand wash for the selected wedge; referenced from
                 CSS via fill: url(#od-template-wedge-grad). Default
@@ -260,9 +322,14 @@ export function TemplatePicker({
             {templates.map((chip, index) => {
               const isActive = chip.id === activeChipId;
               const isHover = chip.id === hoverId;
+              const isFocused = index === focusedIndex;
               return (
                 <path
                   key={chip.id}
+                  ref={(node) => {
+                    wedgeRefs.current[index] = node;
+                  }}
+                  id={`home-hero-template-wedge-${chip.id}`}
                   d={wedgePath(index, templates.length)}
                   className={`home-hero__template-radial-wedge${isActive ? ' is-active' : ''}${isHover ? ' is-hover' : ''}`}
                   role="option"
@@ -271,6 +338,12 @@ export function TemplatePicker({
                   aria-label={labelFor(chip.id)}
                   data-chip-id={chip.id}
                   data-testid={`home-hero-template-wedge-${chip.id}`}
+                  tabIndex={isFocused ? 0 : -1}
+                  onFocus={() => {
+                    setFocusedIndex(index);
+                    setHoverId(chip.id);
+                  }}
+                  onBlur={() => setHoverId((v) => (v === chip.id ? null : v))}
                   onMouseEnter={() => setHoverId(chip.id)}
                   onMouseLeave={() => setHoverId((v) => (v === chip.id ? null : v))}
                   onClick={() => {

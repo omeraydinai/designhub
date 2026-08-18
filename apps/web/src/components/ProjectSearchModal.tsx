@@ -124,6 +124,7 @@ export function ProjectSearchModal({
             className="project-search-input"
             value={query}
             placeholder={t('common.search')}
+            aria-label={t('common.search')}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={onInputKeyDown}
             data-testid="project-search-input"

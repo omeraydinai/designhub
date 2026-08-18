@@ -878,7 +878,7 @@ export const ptBR: Dict = {
   'homeHero.dh.orgPillEmpty': 'Add organization identity',
   'homeHero.dh.orgPillWithName': '{name} identity',
   'homeHero.dh.defaultModel': 'Default model',
-  'homeHero.dh.settingsToggle': "Configurações",
+  'homeHero.dh.settingsToggle': "Padrões",
   'homeHero.dh.reviewReassurance': "Você revisará o resultado antes de qualquer publicação.",
   'homeHero.dh.startHere': 'Start here',
   'homeHero.dh.startCards.corporateSite.title': 'Corporate site',

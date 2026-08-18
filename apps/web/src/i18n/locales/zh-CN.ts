@@ -883,7 +883,7 @@ export const zhCN: Dict = {
   "homeHero.dh.orgPillEmpty": "Add organization identity",
   "homeHero.dh.orgPillWithName": "{name} identity",
   "homeHero.dh.defaultModel": "Default model",
-  "homeHero.dh.settingsToggle": "设置",
+  "homeHero.dh.settingsToggle": "默认设置",
   "homeHero.dh.reviewReassurance": "发布前你都会先审核结果。",
   "homeHero.dh.startHere": "Start here",
   "homeHero.dh.startCards.corporateSite.title": "Corporate site",

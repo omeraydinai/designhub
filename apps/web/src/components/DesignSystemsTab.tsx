@@ -1059,6 +1059,7 @@ export function DesignSystemsTab({
             className={styles.search}
             tabIndex={searchExpanded || filter ? 0 : -1}
             placeholder={t('ds.searchPlaceholder')}
+            aria-label={t('ds.searchPlaceholder')}
             value={filter}
             onFocus={() => {
               setSearchExpanded(true);

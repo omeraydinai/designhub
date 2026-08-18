@@ -1812,6 +1812,17 @@
   right: -2px;
 }
 
+/* Scrim behind the open popover — see the comment at its call site in
+   InlineModelSwitcher.tsx (impeccable critique, 2026-08-18, P1). */
+.inline-switcher__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  background: rgba(28, 27, 26, 0.32);
+  -webkit-backdrop-filter: var(--scrim-backdrop);
+  backdrop-filter: var(--scrim-backdrop);
+}
+
 /* Popover */
 .inline-switcher__popover {
   position: absolute;

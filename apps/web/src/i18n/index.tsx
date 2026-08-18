@@ -136,8 +136,16 @@ function readDesktopHostOsLocale(): string | undefined {
 // auto-detected — they don't override a fresh OS locale read.
 // Exported so tests can pin the priority chain without spinning up the
 // full I18nProvider.
+// Design Hub: this deployment serves exactly one audience (KamuYZ, a Turkish
+// public institution), so the last-resort fallback — reached only once every
+// other signal (manual pick, OS locale, browser languages) has failed to
+// resolve to one of the 19 bundled locales — is 'tr' instead of upstream's
+// 'en' (impeccable critique, 2026-08-18, P1). Real language detection still
+// wins first; this only changes what happens when detection finds nothing.
+const FALLBACK_LOCALE: Locale = 'tr';
+
 export function detectInitialLocale(): Locale {
-  if (typeof window === 'undefined') return 'en';
+  if (typeof window === 'undefined') return FALLBACK_LOCALE;
   let storedLocale: string | null = null;
   let storedSource: string | null = null;
   try {
@@ -161,7 +169,7 @@ export function detectInitialLocale(): Locale {
   const detected = resolveSystemLocale(
     navigator.languages?.length ? navigator.languages : [navigator.language],
   );
-  return detected ?? 'en';
+  return detected ?? FALLBACK_LOCALE;
 }
 
 interface I18nContextValue {

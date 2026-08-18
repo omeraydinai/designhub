@@ -153,7 +153,6 @@ import {
   type UpdaterModel,
   type UpdaterRestartSafety,
 } from '../lib/updater';
-import { PetSettings } from './pet/PetSettings';
 import { McpClientSection } from './McpClientSection';
 import { DesignSystemsSection } from './DesignSystemsSection';
 import { PrivacySection } from './PrivacySection';
@@ -5874,13 +5873,6 @@ export function SettingsDialog({
                   <p className="hint">{t('settings.systemPrefsHint')}</p>
                 </div>
                 <NotificationsSection cfg={cfg} setCfg={setCfg} />
-              </div>
-
-              <div className="settings-general-block">
-                <div className="settings-general-block-head">
-                  <h3>{t('pet.navTitle')}</h3>
-                </div>
-                <PetSettings cfg={cfg} setCfg={setCfg} />
               </div>
 
               <div className="settings-general-block">

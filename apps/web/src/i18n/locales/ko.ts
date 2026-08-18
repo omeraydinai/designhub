@@ -878,7 +878,7 @@ export const ko: Dict = {
   'homeHero.dh.orgPillEmpty': 'Add organization identity',
   'homeHero.dh.orgPillWithName': '{name} identity',
   'homeHero.dh.defaultModel': 'Default model',
-  'homeHero.dh.settingsToggle': "설정",
+  'homeHero.dh.settingsToggle': "기본값",
   'homeHero.dh.reviewReassurance': "게시되기 전에 결과를 검토하게 됩니다.",
   'homeHero.dh.startHere': 'Start here',
   'homeHero.dh.startCards.corporateSite.title': 'Corporate site',

@@ -876,7 +876,7 @@ export const tr: Dict = {
   'workspaceTabs.marketplace': 'Pazar Yeri',
   'homeHero.title': 'Bugün agentınla ne tasarlayacaksın?',
   'homeHero.dh.defaultModel': 'Varsayılan model',
-  'homeHero.dh.settingsToggle': "Ayarlar",
+  'homeHero.dh.settingsToggle': "Varsayılanlar",
   'homeHero.dh.reviewReassurance': "Yayınlanmadan önce sonucu inceleyip onaylayacaksın.",
   'homeHero.dh.startHere': 'Buradan başlayın',
   'homeHero.dh.startCards.corporateSite.title': 'Kurumsal tanıtım sitesi',

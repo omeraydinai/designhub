@@ -878,7 +878,7 @@ export const pl: Dict = {
   'homeHero.dh.orgPillEmpty': 'Add organization identity',
   'homeHero.dh.orgPillWithName': '{name} identity',
   'homeHero.dh.defaultModel': 'Default model',
-  'homeHero.dh.settingsToggle': "Ustawienia",
+  'homeHero.dh.settingsToggle': "Domyślne",
   'homeHero.dh.reviewReassurance': "Zanim cokolwiek zostanie opublikowane, sprawdzisz wynik.",
   'homeHero.dh.startHere': 'Start here',
   'homeHero.dh.startCards.corporateSite.title': 'Corporate site',

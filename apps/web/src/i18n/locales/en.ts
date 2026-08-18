@@ -876,7 +876,7 @@ export const en: Dict = {
   'workspaceTabs.marketplace': 'Marketplace',
   'homeHero.title': 'What will you design with your agent today?',
   'homeHero.dh.defaultModel': 'Default model',
-  'homeHero.dh.settingsToggle': "Settings",
+  'homeHero.dh.settingsToggle': "Defaults",
   'homeHero.dh.reviewReassurance': "You'll review the result before anything is published.",
   'homeHero.dh.startHere': 'Start here',
   'homeHero.dh.startCards.corporateSite.title': 'Corporate site',

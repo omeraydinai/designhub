@@ -1267,6 +1267,9 @@
 .home-hero__execution-switcher .inline-switcher__chip-chevron {
   flex: 0 0 auto;
 }
+.home-hero__execution-switcher .inline-switcher__scrim {
+  z-index: 1502;
+}
 .home-hero__execution-switcher .inline-switcher__popover {
   /* Align the popover's left edge to the trigger (crab chip) left edge. */
   left: 0;
@@ -3510,6 +3513,15 @@
 }
 .home-hero__template-radial-wedge[aria-disabled='true'] {
   cursor: default;
+}
+/* Keyboard focus ring for the roving-tabindex wedge (impeccable critique,
+   2026-08-18, P0 — SVG paths carry no native focus indicator). Drawn as a
+   stroke rather than `outline`, since Chromium/Firefox both skip outline on
+   SVG shape elements. */
+.home-hero__template-radial-wedge:focus-visible {
+  stroke: #8091ff;
+  stroke-width: 3;
+  stroke-linejoin: round;
 }
 /* Arc hugging the center disc over the hovered wedge's angular range — the
    disc "points" back at the previewed template. Round caps per 形状 spec. */

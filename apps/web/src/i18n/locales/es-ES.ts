@@ -878,7 +878,7 @@ export const esES: Dict = {
   'homeHero.dh.orgPillEmpty': 'Add organization identity',
   'homeHero.dh.orgPillWithName': '{name} identity',
   'homeHero.dh.defaultModel': 'Default model',
-  'homeHero.dh.settingsToggle': "Ajustes",
+  'homeHero.dh.settingsToggle': "Predeterminados",
   'homeHero.dh.reviewReassurance': "Revisarás el resultado antes de publicar nada.",
   'homeHero.dh.startHere': 'Start here',
   'homeHero.dh.startCards.corporateSite.title': 'Corporate site',

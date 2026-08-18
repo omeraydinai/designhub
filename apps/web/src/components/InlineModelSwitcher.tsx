@@ -1205,13 +1205,30 @@ export function InlineModelSwitcher({
       </button>
 
       {open ? (
-        <div
-          ref={popoverRef}
-          className={`inline-switcher__popover${popoverPlacement?.up ? ' inline-switcher__popover--up' : ''}`}
-          role="menu"
-          data-testid="inline-model-switcher-popover"
-          style={popoverPlacement ? { maxHeight: `${popoverPlacement.maxHeight}px`, overflowY: 'auto' } : undefined}
-        >
+        <>
+          {/* The "up" flip (#99) measures raw viewport space above the anchor,
+              which does not know whether that space is empty or already holds
+              page content (e.g. the home hero heading) — an upward popover can
+              land directly on top of it. Scoped to the `up` case only: a
+              downward popover opens into space below the anchor and has no
+              equivalent overlap risk. A scrim behind it keeps the overlap from
+              reading as illegible garbled text (impeccable critique,
+              2026-08-18, P1) without needing to teach this shared component
+              every caller's layout. */}
+          {popoverPlacement?.up ? (
+            <div
+              className="inline-switcher__scrim"
+              aria-hidden="true"
+              onClick={() => setOpen(false)}
+            />
+          ) : null}
+          <div
+            ref={popoverRef}
+            className={`inline-switcher__popover${popoverPlacement?.up ? ' inline-switcher__popover--up' : ''}`}
+            role="menu"
+            data-testid="inline-model-switcher-popover"
+            style={popoverPlacement ? { maxHeight: `${popoverPlacement.maxHeight}px`, overflowY: 'auto' } : undefined}
+          >
           {compact ? null : (
           <div className="inline-switcher__row">
             <span className="inline-switcher__label">
@@ -1763,6 +1780,7 @@ export function InlineModelSwitcher({
             <span>{t('inlineSwitcher.openFullSettings')}</span>
           </button>
         </div>
+        </>
       ) : null}
     </div>
   );
